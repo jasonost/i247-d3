@@ -1,0 +1,135 @@
+/* ---------------------------------------------------------------------------------------------------- */
+/* RESET CSS */
+
+/* 0. resetting css is highly recommended; this overrides some default browser styles and allows you to start from a "blank slate" */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#wrapper {
+  height: 800px; 
+  width: 1200px;
+  margin: 5px;
+}
+
+#header {
+    width: 98%;
+    height: 40px;
+    margin: auto;
+    background-color: #666;
+    color: white;
+    font-size: 32px;
+    text-align: left;
+    padding-left: 1%;
+    padding-right: 1%;
+    font-weight: bold;
+}
+
+#chord-diagram {
+    width: 780px;
+    height: 760px;
+    float: left;
+}
+
+#housing-chart {
+    width: 400px;
+    height: 210px;
+    padding: 10px;
+    float: left;
+    visibility: hidden;
+}
+
+#unemp-chart {
+    width: 400px;
+    height: 210px;
+    padding: 10px;
+    float: left;
+    visibility: hidden;
+}
+
+#taxes-chart {
+    width: 400px;
+    height: 210px;
+    padding: 10px;
+    float: left;
+    visibility: hidden;
+}
+
+.charttitle {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+    text-align: center;
+}
+
+#sources {
+    width: 400px;
+    height: 50px;
+    float: left;
+    padding: 10px;
+    font-size: 12px;
+    color: #333;
+}
+
+#circle:hover path.fade {
+    opacity: 0.1;
+}
+
+#tooltip {
+    color: white;
+    opacity: .8;
+    background: #333;
+    padding: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    font-size: 12px;
+    position: absolute;
+    z-index: 10;
+    visibility: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-size: 12px;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.mainline {
+    fill: none;
+    stroke-width: 3px;
+}
