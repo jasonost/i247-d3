@@ -1,5 +1,55 @@
 $(document).ready(function() {
 
+    // size div elements
+    var windowHeight = $(window).height() - 8;
+    var windowWidth = $(window).width() - 8;
+
+    $("#wrapper").css({
+        "height": windowHeight + "px",
+        "width": windowWidth + "px",
+        "margin": "4px"
+    });
+    $("#header").css({
+        "width": "96%",
+        "height": "5%",
+        "padding-left": "1%",
+        "padding-right": "3%",
+        "background-color": "#666",
+        "font-size": (0.04 * windowHeight) + "px"
+    });
+    $("#chord-diagram").css({
+        "height": "95%",
+        "width": "65%",
+        "float": "left"
+    });
+    $(".side-chart").css({
+        "height": "28%",
+        "width": "35%",
+        "float": "left",
+        "visibility": "hidden"
+    });
+    $("#legend").css({
+        "height": "6%",
+        "width": "35%",
+        "float": "left",
+        "visibility": "hidden",
+        "font-size": (0.018 * windowHeight) + "px"
+    });
+    $("#sources").css({
+        "height": "5%",
+        "width": "35%",
+        "float": "left"
+    });
+    $(".charttitle").css({
+        "font-size": (0.02 * windowHeight) + "px",
+        "margin-top": (0.01 * windowHeight) + "px"
+    });
+    $("#sourcetext").css({
+        "font-size": (0.015 * windowHeight) + "px",
+        "margin": (0.01 * windowHeight) + "px",
+        "color": "#333"
+    })
+
     var states = Object.keys(migration);
 
     // function to get values from dictionary
@@ -118,7 +168,7 @@ $(document).ready(function() {
         .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
         .attr("transform", function(d) {
           return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
-              + "translate(" + (innerRadius + 40) + ")"
+              + "translate(" + (innerRadius + (windowHeight * 0.05)) + ")"
               + (d.angle > Math.PI ? "rotate(180)" : "");
         })
         .text(function(d) { return states[d.index]; });
@@ -175,6 +225,8 @@ $(document).ready(function() {
         d3.select("#unemp-chart").select("svg").remove();
         d3.select("#taxes-chart").style("visibility", "hidden");
         d3.select("#taxes-chart").select("svg").remove();
+        d3.select("#legend").style("visibility", "hidden");
+        d3.select("#legend").selectAll("p").remove();
     };
 
     function groupTip (d) {
@@ -204,10 +256,29 @@ $(document).ready(function() {
         }
     };
 
+    function legendGroup(numcat) {
+        if (numcat == 2) {
+            $("#legend").append("<p class='legendtext'>The <span style='color: #FFF; background-color: #000; font-weight: bolder;'>black</span> lines and bar are the state of interest.</p>");
+            $("#legend").append("<p class='legendtext'>The <span style='color: green; font-weight: bolder;'>green</span> lines and bar are the state of greatest in-migration AND out-migration.</p>");
+        }
+        else {
+            $("#legend").append("<p class='legendtext'>The <span style='color: #FFF; background-color: #000; font-weight: bolder;'>black</span> lines and bar are the state of interest.</p>");
+            $("#legend").append("<p class='legendtext'>The <span style='color: green; font-weight: bolder;'>green</span> lines and bar are the state of greatest in-migration.</p>");
+            $("#legend").append("<p class='legendtext'>The <span style='color: red; font-weight: bolder;'>red</span> lines and bar are the state of greatest out-migration.</p>");
+        }
+        d3.select("#legend").style("visibility", "visible");
+    }
+
+    function legendChord() {
+        $("#legend").append("<p class='legendtext'>The <span style='color: green; font-weight: bolder;'>green</span> lines and bar are the state of greater in-migration.</p>");
+        $("#legend").append("<p class='legendtext'>The <span style='color: red; font-weight: bolder;'>red</span> lines and bar are the state of greater out-migration.</p>");
+        d3.select("#legend").style("visibility", "visible");
+    }
+
     function housingGroup(stusab) {
-        var margin = {top: 20, right: 80, bottom: 30, left: 50},
+        var margin = {top: 5, right: 80, bottom: 30, left: 50},
             width = $("#housing-chart").width() - margin.left - margin.right,
-            height = $("#housing-chart").height() - margin.top - margin.bottom;
+            height = $("#housing-chart").height() - margin.top - margin.bottom - (0.03 * windowHeight);
 
         var parseDate = d3.time.format("%Y-%m-%d").parse;
 
@@ -306,12 +377,13 @@ $(document).ready(function() {
           .text(function(d) { return d.name; });
 
         d3.select("#housing-chart").style("visibility", "visible");
+        legendGroup(chart_states.length);
     };
 
     function unempGroup(stusab) {
-        var margin = {top: 20, right: 80, bottom: 30, left: 50},
+        var margin = {top: 5, right: 80, bottom: 30, left: 50},
             width = $("#unemp-chart").width() - margin.left - margin.right,
-            height = $("#unemp-chart").height() - margin.top - margin.bottom;
+            height = $("#unemp-chart").height() - margin.top - margin.bottom - (0.03 * windowHeight);
 
         var parseDate = d3.time.format("%Y-%m-%d").parse;
 
@@ -414,9 +486,9 @@ $(document).ready(function() {
 
     function taxesGroup(stusab) {
         var p = d3.format(".2%");
-        var margin = {top: 40, right: 80, bottom: 30, left: 50},
+        var margin = {top: 20, right: 80, bottom: 30, left: 50},
             width = $("#taxes-chart").width() - margin.left - margin.right,
-            height = $("#taxes-chart").height() - margin.top - margin.bottom;
+            height = $("#taxes-chart").height() - margin.top - margin.bottom - (0.03 * windowHeight);
 
         var x = d3.scale.linear()
             .range([0, width]);
@@ -492,9 +564,9 @@ $(document).ready(function() {
 }
 
     function housingChord(stusab1, stusab2) {
-        var margin = {top: 20, right: 80, bottom: 30, left: 50},
+        var margin = {top: 5, right: 80, bottom: 30, left: 50},
             width = $("#housing-chart").width() - margin.left - margin.right,
-            height = $("#housing-chart").height() - margin.top - margin.bottom;
+            height = $("#housing-chart").height() - margin.top - margin.bottom - (0.03 * windowHeight);
 
         var parseDate = d3.time.format("%Y-%m-%d").parse;
 
@@ -590,12 +662,13 @@ $(document).ready(function() {
           .text(function(d) { return d.name; });
 
         d3.select("#housing-chart").style("visibility", "visible");
+        legendChord();
     };
 
     function unempChord(stusab1, stusab2) {
-        var margin = {top: 20, right: 80, bottom: 30, left: 50},
+        var margin = {top: 5, right: 80, bottom: 30, left: 50},
             width = $("#unemp-chart").width() - margin.left - margin.right,
-            height = $("#unemp-chart").height() - margin.top - margin.bottom;
+            height = $("#unemp-chart").height() - margin.top - margin.bottom - (0.03 * windowHeight);
 
         var parseDate = d3.time.format("%Y-%m-%d").parse;
 
@@ -695,9 +768,9 @@ $(document).ready(function() {
 
     function taxesChord(stusab1, stusab2) {
         var p = d3.format(".2%");
-        var margin = {top: 40, right: 80, bottom: 30, left: 50},
+        var margin = {top: 20, right: 80, bottom: 30, left: 50},
             width = $("#taxes-chart").width() - margin.left - margin.right,
-            height = $("#taxes-chart").height() - margin.top - margin.bottom;
+            height = $("#taxes-chart").height() - margin.top - margin.bottom - (0.03 * windowHeight);
 
         var x = d3.scale.linear()
             .range([0, width]);
