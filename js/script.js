@@ -256,22 +256,18 @@ $(document).ready(function() {
         }
     };
 
-    function legendGroup(numcat) {
-        if (numcat == 2) {
-            $("#legend").append("<p class='legendtext'>The <span style='color: #FFF; background-color: #000; font-weight: bolder;'>black</span> lines and bar are the state of interest.</p>");
-            $("#legend").append("<p class='legendtext'>The <span style='color: green; font-weight: bolder;'>green</span> lines and bar are the state of greatest in-migration AND out-migration.</p>");
+    function legendGroup(statelist) {
+        if (statelist.length == 2) {
+            $("#legend").append("<p class='legendtext'>In 2012 <span style='color: green; font-weight: bolder;'>" + statename[statelist[1]] + "</span> sent the most people to <span style='color: #FFF; background-color: #000; font-weight: bolder;'>" + statename[statelist[0]] + "</span> (and was also the state to which " + statename[statelist[0]] + " sent the most people).</p>");
         }
         else {
-            $("#legend").append("<p class='legendtext'>The <span style='color: #FFF; background-color: #000; font-weight: bolder;'>black</span> lines and bar are the state of interest.</p>");
-            $("#legend").append("<p class='legendtext'>The <span style='color: green; font-weight: bolder;'>green</span> lines and bar are the state of greatest in-migration.</p>");
-            $("#legend").append("<p class='legendtext'>The <span style='color: red; font-weight: bolder;'>red</span> lines and bar are the state of greatest out-migration.</p>");
+            $("#legend").append("<p class='legendtext'>In 2012 <span style='color: green; font-weight: bolder;'>" + statename[statelist[1]] + "</span> sent the most people to <span style='color: #FFF; background-color: #000; font-weight: bolder;'>" + statename[statelist[0]] + "</span>, and <span style='color: red; font-weight: bolder;'>" + statename[statelist[2]] + "</span> was the state to which " + statename[statelist[0]] + " sent the most people.</p>");
         }
         d3.select("#legend").style("visibility", "visible");
     }
 
-    function legendChord() {
-        $("#legend").append("<p class='legendtext'>The <span style='color: green; font-weight: bolder;'>green</span> lines and bar are the state of greater in-migration.</p>");
-        $("#legend").append("<p class='legendtext'>The <span style='color: red; font-weight: bolder;'>red</span> lines and bar are the state of greater out-migration.</p>");
+    function legendChord(stusab1, stusab2) {
+        $("#legend").append("<p class='legendtext'>In 2012 more people moved from <span style='color: red; font-weight: bolder;'>" + statename[stusab2] + "</span> to <span style='color: green; font-weight: bolder;'>" + statename[stusab1] + "</span> than vice versa.</p>");
         d3.select("#legend").style("visibility", "visible");
     }
 
@@ -377,7 +373,7 @@ $(document).ready(function() {
           .text(function(d) { return d.name; });
 
         d3.select("#housing-chart").style("visibility", "visible");
-        legendGroup(chart_states.length);
+        legendGroup(chart_states);
     };
 
     function unempGroup(stusab) {
@@ -662,7 +658,7 @@ $(document).ready(function() {
           .text(function(d) { return d.name; });
 
         d3.select("#housing-chart").style("visibility", "visible");
-        legendChord();
+        legendChord(stusab1, stusab2);
     };
 
     function unempChord(stusab1, stusab2) {
@@ -780,7 +776,7 @@ $(document).ready(function() {
 
         var color = d3.scale.ordinal()
             .domain([0, 1])
-            .range(["green", "red"]);
+            .range(["red", "green"]);
 
         var svg = d3.select("#taxes-chart").append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -788,7 +784,7 @@ $(document).ready(function() {
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        var chart_states = [stusab1, stusab2];
+        var chart_states = [stusab2, stusab1];
 
         color.domain(chart_states);
 
